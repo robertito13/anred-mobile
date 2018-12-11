@@ -24,9 +24,11 @@ export default class ListMore extends Component {
     getLatestArticles()
       .then(data => {
         try {
-          let header = data.shift();
-          this.setState({ header: header })
-          this.setState({ articles: data })
+          if (data.length > 0) {
+            let header = data.shift();
+            this.setState({ header: header });
+            this.setState({ articles: data });
+          }
         } catch {
           this.setState({
             articles: [
