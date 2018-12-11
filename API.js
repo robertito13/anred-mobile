@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_URL = 'http://anred.dev.cc/wp-json/mobile/v1/';
 
 export function getLatestArticles(page = 1) {
-  let response = axios.get(`${API_URL}latest/?page=${page}`);
+  let response = axios.get(`${API_URL}latest/?page=${page}&header=true`);
 
   return response
   .then(result => {
