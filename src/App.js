@@ -7,23 +7,23 @@ export default class App extends Component {
     return (
       <View style={style.mainContainer}>
         <View style={style.actionBar}>
-          <Image style={style.logo} source={require('./assets/logo-invertido.png')} />
+          <Image style={style.logo} source={require('../assets/logo-invertido.png')} />
           <View style={style.actionToolbar}>
             <TouchableWithoutFeedback>
-              <Image style={style.actionButton} source={require('./assets/searchIcon.png')} />
+              <Image style={style.actionButton} source={require('../assets/searchIcon.png')} />
             </TouchableWithoutFeedback>
           </View>
         </View>
         <ListLatest />
         <View style={style.navigationBar}>
           <TouchableWithoutFeedback>
-            <Image style={style.navigationButton} source={require('./assets/homeIcon.png')} />
+            <Image style={style.navigationButton} source={require('../assets/homeIcon.png')} />
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback>
-            <Image style={style.navigationButton} source={require('./assets/fireIcon.png')} />
+            <Image style={style.navigationButton} source={require('../assets/fireIcon.png')} />
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback>
-            <Image style={style.navigationButton} source={require('./assets/gridIcon.png')} />
+            <Image style={style.navigationButton} source={require('../assets/gridIcon.png')} />
           </TouchableWithoutFeedback>
         </View>
       </View>

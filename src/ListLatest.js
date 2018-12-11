@@ -53,7 +53,7 @@ export default class ListMore extends Component {
   }
 
   renderItem = ({ item }) => {
-    let thumbnail = (item.thumbnail != '') ? { uri: item.thumbnail } : require('./assets/placemark.png')
+    let thumbnail = (item.thumbnail != '') ? { uri: item.thumbnail } : require('../assets/placemark.png')
 
     return (
       <ListItem
@@ -67,7 +67,7 @@ export default class ListMore extends Component {
   }
 
   renderHeader = () => {
-    let thumbnail = (this.state.header.thumbnail != '') ? { uri: this.state.header.thumbnail } : require('./assets/placemark.png')
+    let thumbnail = (this.state.header.thumbnail != '') ? { uri: this.state.header.thumbnail } : require('../assets/placemark.png')
 
     return(
       <View>
