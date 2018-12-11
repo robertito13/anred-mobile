@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {ListItem} from 'react-native-elements'
-import {getArticles} from './API';
+import {getLatestArticles} from './API';
 
 export default class ListMore extends Component {
   state = {
@@ -17,12 +17,11 @@ export default class ListMore extends Component {
         title: '',
         thumbnail: ''
       }
-    ],
-    section: 'latest'
+    ]
   };
 
   componentDidMount() {
-    getArticles()
+    getLatestArticles()
       .then(data => {
         try {
           let header = data.shift();
