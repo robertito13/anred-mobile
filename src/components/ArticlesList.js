@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { getLatestNews, getHotestNews } from '../actions';
+import { getLatestNews, getHotestNews, getSection } from '../actions';
 
 class ArticlesList extends Component {
 
@@ -23,6 +23,9 @@ class ArticlesList extends Component {
         break;
       case 'hotest':
         this.props.fetchHotest();
+        break;
+      case 'section':
+        this.props.fetchSection(this.props.section);
         break;
     }
   }
@@ -112,7 +115,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       fetchLatest: () => dispatch(getLatestNews()),
-      fetchHotest: () => dispatch(getHotestNews())
+      fetchHotest: () => dispatch(getHotestNews()),
+      fetchSection: (section) => dispatch(getSection(section))
   };
 };
 

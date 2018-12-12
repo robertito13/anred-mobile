@@ -15,7 +15,8 @@ const initialState = {
       title: '',
       thumbnail: ''
     }
-  ]
+  ],
+  sections: []
 };
 
 const reducers = (state = initialState, action) => {
@@ -23,6 +24,7 @@ const reducers = (state = initialState, action) => {
   switch(action.type) {
     case type.LATEST_NEWS_SUCCESS:
     case type.HOTEST_NEWS_SUCCESS:
+    case type.SECTION_SUCCESS:
       let header = action.articles.shift();
       let articles = action.articles;
 
@@ -32,11 +34,21 @@ const reducers = (state = initialState, action) => {
         articles
       };
     case type.CHANGE_SCREEN:
-      let screen = action.screen;
       return {
         ...state,
-        screen
+        screen: action.screen
       };
+    case type.CHANGE_SECTION:
+      return {
+        ...state,
+        screen: action.screen,
+        section: action.section
+      };
+    case type.SECTIONS_SUCCESS:
+      return {
+        ...state,
+        sections: action.sections
+      }
     default:
       return state;
   }

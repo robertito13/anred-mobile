@@ -13,7 +13,9 @@ class NavigationBar extends Component {
         <TouchableOpacity onPress={()=>this.props.toHotest()}>
           <Image style={style.button} source={require('../../assets/fireIcon.png')} />
         </TouchableOpacity>
-        <Image style={style.button} source={require('../../assets/gridIcon.png')} />
+        <TouchableOpacity onPress={()=>this.props.toSections()}>
+          <Image style={style.button} source={require('../../assets/gridIcon.png')} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -47,7 +49,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       toHotest: () => dispatch(changeScreen('hotest')),
-      toLatest: () => dispatch(changeScreen('latest'))
+      toLatest: () => dispatch(changeScreen('latest')),
+      toSections: () => dispatch(changeScreen('sections')),
   };
 };
 
