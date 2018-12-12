@@ -1,13 +1,12 @@
 import axios from 'axios';
+import { URL, LATEST } from '../constants/API';
 
-const API_URL = 'http://anred.dev.cc/wp-json/mobile/v1/';
-
-export function getLatestArticles(page = 1) {
-  let response = axios.get(`${API_URL}latest/?page=${page}&header=true`);
+export function getArticles(type = LATEST, page = 1) {
+  let response = axios.get(`${URL}${type}/?page=${page}&header=true`);
 
   return response
   .then(result => {
-    console.log('[getLatestArticles] Data received', result.data);
+    console.log('[getArticles] Data received', result.data);
     return result.data;
   })
   .catch(error => {
