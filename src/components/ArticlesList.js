@@ -1,41 +1,67 @@
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import { connect } from 'react-redux';
-import { getLatestNews, getHotestNews, getSection } from '../actions';
+import { withNavigation } from 'react-navigation';
+
+import * as Api from '../api';
+import { LATEST, HOTEST } from '../constants/API';
 
 class ArticlesList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.parseResponse = this.parseResponse.bind(this);
+    this.getData = this.getData.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
+
+    this.state = {
+      articles: [],
+      header: {}
+    };
+  }
 
   componentDidMount() {
     this.getData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.type !== this.props.type) {
-      this.getData();
-    }
-  }
-
   getData() {
     switch(this.props.type) {
       case 'latest':
-        this.props.fetchLatest();
-        break;
+        Api.getArticles(LATEST)
+          .then( this.parseResponse )
+          .catch( error => console.log(error));
+      break;
       case 'hotest':
-        this.props.fetchHotest();
-        break;
+        Api.getArticles(HOTEST)
+          .then( this.parseResponse )
+          .catch( error => console.log(error));
+      break;
       case 'section':
-        this.props.fetchSection(this.props.section);
-        break;
+        Api.getSection( this.props.section )
+          .then( this.parseResponse )
+          .catch( error => console.log(error));
+      break;
     }
   }
 
+  parseResponse(data) {
+    this.setState({
+      header: data.shift(),
+      articles: data
+    })
+  }
+
   render() {
-    if (!this.props.articles) return null;
+    if (this.state.articles.length == 0) {
+      return(
+        <Text>Cargando...</Text>
+      );
+    }
 
     return(
       <FlatList
-        data={ this.props.articles }
+        data={ this.state.articles }
         keyExtractor={ item => 'article-' + item.id }
         ListHeaderComponent = { this.renderHeader }
         renderItem={ this.renderItem }
@@ -43,7 +69,7 @@ class ArticlesList extends Component {
     );
   }
 
-  renderItem = ({ item }) => {
+  renderItem({ item }) {
     let thumbnail = (item.thumbnail != '') ? { uri: item.thumbnail } : require('../../assets/placemark.png')
 
     return (
@@ -51,21 +77,22 @@ class ArticlesList extends Component {
         title={ item.title }
         titleStyle={itemStyle.title}
         rightElement={<Image style={itemStyle.thumbnail} source={ thumbnail } />}
-        containerStyle={{ borderBottomWidth: 0 }}
+        onPress={() => this.props.navigation.navigate('Article', { article: item.id }) }
       />
     );
   }
 
-  renderHeader = () => {
-    if (!this.props.header) return null;
+  renderHeader() {
+    console.log(this.state);
+    if (!this.state.header) return null;
 
-    let thumbnail = (this.props.header.thumbnail != '') ? { uri: this.props.header.thumbnail } : require('../../assets/placemark.png')
+    let thumbnail = (this.state.header.thumbnail != '') ? { uri: this.state.header.thumbnail } : require('../../assets/placemark.png')
 
     return(
       <View>
         <Image style={headerStyle.thumbnail} source={ thumbnail } />
-        <Text style={headerStyle.title}>{ this.props.header.title }</Text>
-        { (this.props.header.excerpt != '') && <Text style={headerStyle.excerpt} numberOfLines={5}>{ this.props.header.excerpt }</Text> }
+        <Text style={headerStyle.title}>{ this.state.header.title }</Text>
+        { (this.state.header.excerpt != '') && <Text style={headerStyle.excerpt} numberOfLines={5}>{ this.state.header.excerpt }</Text> }
       </View>
     );
   }
@@ -105,19 +132,4 @@ const headerStyle = StyleSheet.create({
   }
 });
 
-const mapStateToProps = (state) => {
-  return {
-    articles: state.articles,
-    header: state.header
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-      fetchLatest: () => dispatch(getLatestNews()),
-      fetchHotest: () => dispatch(getHotestNews()),
-      fetchSection: (section) => dispatch(getSection(section))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticlesList);
+export default withNavigation(ArticlesList);

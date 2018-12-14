@@ -1,21 +1,49 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Text } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import { connect } from 'react-redux';
-import { getSections, changeSection } from '../actions';
+import { withNavigation } from 'react-navigation';
+
+import * as Api from '../api';
 
 class SectionsList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.getData = this.getData.bind(this);
+    this.parseResponse = this.parseResponse.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+
+    this.state = {
+      sections: []
+    }
+  }
 
   componentDidMount() {
-    this.props.fetchSections();
+    this.getData();
+  }
+
+  getData() {
+    Api.getSections()
+      .then( this.parseResponse )
+      .catch( error => console.log(error));
+  }
+
+  parseResponse(data) {
+    this.setState({
+      sections: data
+    })
   }
 
   render() {
-    if (!this.props.sections) return null;
+    if (this.state.sections.length == 0) {
+      return(
+        <Text>Cargando...</Text>
+      );
+    }
 
     return(
       <FlatList
-        data={ this.props.sections }
+        data={ this.state.sections }
         numColumns={2}
         keyExtractor={ item => 'section-' + item.id }
         renderItem={ this.renderItem }
@@ -23,7 +51,7 @@ class SectionsList extends Component {
     );
   }
 
-  renderItem = ({ item, index }) => {
+  renderItem({ item, index }) {
     return (
       <ListItem
         containerStyle={[
@@ -32,7 +60,7 @@ class SectionsList extends Component {
         ]}
         title={ item.name }
         titleStyle={style.title}
-        onPress={()=>this.props.toSection(item.id)}
+        onPress={() => this.props.navigation.navigate('Section', { section: item.id }) }
       />
     );
   }
@@ -50,17 +78,4 @@ const style = StyleSheet.create({
   }
 });
 
-const mapStateToProps = (state) => {
-  return {
-    sections: state.sections
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-      fetchSections: () => dispatch(getSections()),
-      toSection: (section) => dispatch(changeSection(section))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SectionsList);
+export default withNavigation(SectionsList);
