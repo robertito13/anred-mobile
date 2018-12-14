@@ -6,7 +6,7 @@ import {
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
-import {StatusBar} from 'react-native';
+import {StatusBar, Text} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 
 import ArticleScreen from './screens/Article';
@@ -56,13 +56,15 @@ const BottomNavigator = createMaterialTopTabNavigator(
         ),
         tabBarLabel: 'Secciones',
         tabBarOnPress: ({navigation, defaultHandler}) => {
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({ routeName: 'Sections' }),
-            ],
-          });
-          navigation.dispatch(resetAction);
+          if (navigation.state.index > 0 ) {
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Sections' }),
+              ],
+            });
+            navigation.dispatch(resetAction);
+          }
 
           defaultHandler();
         }
@@ -92,11 +94,26 @@ const TopNavigator = createStackNavigator(
   {
     screen: {
       screen: BottomNavigator,
-      navigationOptions: {
-        headerLeft: <Logo />,
-        headerStyle: {
-          backgroundColor:'#222'
+      navigationOptions: ({navigation}) => {
+        let sectionsRoute = navigation.state.routes[2];
+        let options = {
+          headerLeft: <Logo />,
+          headerStyle: {
+            backgroundColor:'#222'
+          }
+        };
+
+        if (sectionsRoute.index > 0) {
+          options.headerRight = (
+            <Text style={{ marginHorizontal: 12, color: '#eee', fontSize: 16, fontFamily: "LibreFranklin",fontWeight: 'bold' }}>{sectionsRoute.routes[1].params.title}</Text>
+          );
         }
+
+        if (navigation.state.index != 2) {
+          options.headerRight = null;
+        }
+
+        return options;
       }
     },
     Article: {
