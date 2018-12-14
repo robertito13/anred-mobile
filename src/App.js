@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { StackActions, NavigationActions, createMaterialTopTabNavigator, createStackNavigator, createAppContainer } from "react-navigation";
+import {
+  StackActions,
+  NavigationActions,
+  createMaterialTopTabNavigator,
+  createStackNavigator,
+  createAppContainer
+} from "react-navigation";
+import {StatusBar} from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 
 import ArticleScreen from './screens/Article';
 import HomeScreen from './screens/Home';
@@ -107,6 +115,11 @@ let AppContainer = createAppContainer(TopNavigator);
 
 export default class App extends Component {
   render() {
-    return <AppContainer />;
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <StatusBar barStyle="light-content" backgroundColor="#222" />
+        <AppContainer />
+      </SafeAreaView>
+    );
   }
 }
