@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 
@@ -83,17 +83,21 @@ class ArticlesList extends Component {
   }
 
   renderHeader() {
-    console.log(this.state);
     if (!this.state.header) return null;
 
     let thumbnail = (this.state.header.thumbnail != '') ? { uri: this.state.header.thumbnail } : require('../../assets/placemark.png')
 
     return(
-      <View>
-        <Image style={headerStyle.thumbnail} source={ thumbnail } />
-        <Text style={headerStyle.title}>{ this.state.header.title }</Text>
-        { (this.state.header.excerpt != '') && <Text style={headerStyle.excerpt} numberOfLines={5}>{ this.state.header.excerpt }</Text> }
-      </View>
+      <TouchableHighlight
+        underlayColor='lightgrey'
+        onPress={() => this.props.navigation.navigate('Article', { article: this.state.header.id }) }
+      >
+        <View>
+          <Image style={headerStyle.thumbnail} source={ thumbnail } />
+          <Text style={headerStyle.title}>{ this.state.header.title }</Text>
+          { (this.state.header.excerpt != '') && <Text style={headerStyle.excerpt} numberOfLines={5}>{ this.state.header.excerpt }</Text> }
+        </View>
+      </TouchableHighlight>
     );
   }
 }
